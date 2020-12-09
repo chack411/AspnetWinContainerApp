@@ -165,7 +165,7 @@ mcr.microsoft.com/dotnet/framework/aspnet                     4.8-windowsserverc
 続いて、下記の `docker run` コマンドでは、指定した Docker コンテナー イメージを名前 `wincon1` で実行します。併せて、Windows 用の Web サーバーである IIS (Internet Information Services) サービス `w3svc` を起動します。
 
 ```console
-docker run -it --entrypoint cmd --name wincon1 aspnetwincontainerapp:latest /c "start /B C:\ServiceMonitor.exe w3svc"
+docker run -it -d --entrypoint cmd --name wincon1 aspnetwincontainerapp:latest /c "start /B C:\ServiceMonitor.exe w3svc"
 ```
 
 続いて、下記の `docker ps -a` コマンドでは、Docker コンテナーを列挙します。
