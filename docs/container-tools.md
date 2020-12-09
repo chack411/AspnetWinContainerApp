@@ -9,7 +9,7 @@ Visual Studio を使用すると、コンテナー化された .NET、ASP.NET、
 * [Azure CLI](https://docs.microsoft.com/ja-jp/cli/azure/install-azure-cli)
 * [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
 * [kubectl CLI](https://kubernetes.io/ja/docs/tasks/tools/install-kubectl/#install-kubectl-on-windows) (Docker Desktop でも一緒にインストールされます)
-* `ASP.NET と Web 開発`、`Azure の開発` ワークロードと、`.NET Framework 4.8 SDK`、`.NET Framework 4.8 Targeting Pack`、`Git for Windows`、`GitHub Extension for Visual Studio` 個別コンポーネントを選択してインストールした [Visual Studio 2019](https://visualstudio.microsoft.com/downloads)
+* [Visual Studio 2019](https://visualstudio.microsoft.com/downloads) (`ASP.NET と Web 開発`、`Azure の開発` ワークロードと、`.NET Framework 4.8 SDK`、`.NET Framework 4.8 Targeting Pack`、`Git for Windows`、`GitHub Extension for Visual Studio` 個別コンポーネントを選択してインストール)
 
 ## サンプル ASP.NET Web アプリケーションの準備
 
@@ -178,7 +178,8 @@ docker ps -a
 
 ```console
 C:\>docker ps -a
-CONTAINER ID        IMAGE                          COMMAND                  CREATED              STATUS              PORTS               NAMESf832a6d63858        aspnetwincontainerapp:latest   "cmd /c 'start /B C:…"   About a minute ago   Up About a minute   80/tcp              wincon1
+CONTAINER ID        IMAGE                          COMMAND                  CREATED              STATUS              PORTS               NAMES
+f832a6d63858        aspnetwincontainerapp:latest   "cmd /c 'start /B C:…"   About a minute ago   Up About a minute   80/tcp              wincon1
 ```
 
 続く、下記の `docker exec` コマンドでは、実行中の Docker コンテナーでコマンド `powershell` を実行します。

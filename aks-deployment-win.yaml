@@ -16,7 +16,7 @@ spec:
         "kubernetes.io/os": windows
       containers:
       - name: winaspnetapp
-        image: akirainaks.azurecr.io/AspnetWinContainerApp:20201203003554
+        image: aspnetwincontainerapps.azurecr.io/aspnetwincontainerapp:latest
         resources:
           limits:
             cpu: 1
