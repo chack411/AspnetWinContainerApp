@@ -15,19 +15,46 @@ AKS クラスターを作成し、Windows のノードプールを追加しま�
 az aks create \
     --resource-group <myResourceGroup> \
     --name <myAKSCluster> \
-    --node-count 2 \
+    --node-count 1 \
     --generate-ssh-keys \
+    --enable-addons monitoring \
+#    --windows-admin-password $PASSWORD_WIN \
+#    --windows-admin-username azureuser \
+#    --vm-set-type VirtualMachineScaleSets \
+#    --network-plugin azure
     --attach-acr <acrName>
 ```
-他にも多数のオプションを指定できます。az aks createの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
+作成したAKSクラスターでAzure Monitorを有効化するため、--enable-addonsオプションを追加していますが、AKSクラスター作成後に有効化することも可能です。他にも多数のオプションを指定できます。az aks createの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
 
 デプロイにはしばらく時間がかかります。デプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
 
-> [Note] クラスターが確実に動作するようにするには、少なくとも 2 つのノードを実行する必要があります。
+> 今回は実験用に1台のノードを指定していますが、が確実に動作するようにするには、少なくとも 3 つのノードの実行が望ましい構成です。
 
 ## Windowsノードプールの追加
 
-AKS
+AKSクラスターでは、同じ構成のノードを[ノードプール](https://docs.microsoft.com/ja-jp/azure/aks/use-multiple-node-pools)と呼ばる概念でグループ化して管理します。このため、構成の異なる複数種類のノード群で１つのAKSクラスターを構成することができます。AKSクラスターを作成すると、[システムノードプール](https://docs.microsoft.com/ja-jp/azure/aks/use-system-pools)と呼ばれるLinuxのノードが作成されます。このノードプールにはKubernetesに必須のコンポーネントが稼働するため、削除できません。
+`az aks nodepool list`コマンドで、ノードプールの構成を確認できます。
+
+```
+az aks nodepool list \
+    --resource-group <myResourceGroup> \
+    --cluster-name <myAKSCluster> \
+    -o table
+```
+
+今回はWindowsコンテナーを利用するため、Windowsのノードプールを追加します。ノードプールの追加には、`az aks nodepool add`コマンドを利用します。下記のコマンドでは、npwinという名前のWindows Serverノードプールを１台、AKSクラスターに追加します。
+
+```
+az aks nodepool add \
+    --resource-group <myResourceGroup> \
+    --cluster-name <myAKSCluster> \
+    --os-type Windows \
+    --name npwin \
+    --node-count 1
+```
+
+ノードの追加にはしばらく時間がかかります。`az aks nodepool add`コマンドのオプションでVMのサイズなども指定できます。詳しくは[こちらのドキュメント](https://docs.microsoft.com/en-us/cli/azure/aks/nodepool?view=azure-cli-latest#az_aks_nodepool_add)を参照ください。
+
 
 ## <a name="install-the-kubernetes-cli"></a>Kubernetes CLI のインストール
 
