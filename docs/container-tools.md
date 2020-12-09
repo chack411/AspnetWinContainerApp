@@ -33,13 +33,25 @@ https://github.com/chack411/AspnetWinContainerApp.git
 git clone https://github.com/chack411/AspnetWinContainerApp.git
 ```
 
-## Dockerfile をプロジェクトを追加する
+## ローカル環境の開発用 IIS での実行
 
-1. ソリューション エクスプローラーのプロジェクト名 `WebinarWebASpp10dc` 上で右クリックして、`[追加]-[Docker サポート]` をクリックします。
+はじめに、ローカル環境の開発用 IIS (Internet Information Services) で、アプリケーションのビルドおよび実行確認をします。
 
-1. コンテナーの種類 `Windows` を選択し、 `[作成]` をクリックします。
+1. Visual Studio 2019 のメニュー `[デバッグ]-[デバッグの開始(S)]` を選択するか、または `F5` キーを押して、アプリケーションのビルドおよびデバッグを開始します。
+
+1. ビルドが完了すると、アプリケーションがローカルホスト `https://localhost:<ポート番号>` で実行され、Web ブラウザで表示されます。同時に、Visual Studio 2019 のデバッガーが開き、アプリケーションのデバッグが可能になります。
+
+   ![Visual Studio 2019 ローカル IIS での実行](media/vs19_runlocalhost.png)
+
+## Dockerfile をプロジェクトに追加する
+
+1. ソリューション エクスプローラーのプロジェクト名 `AspnetWinContainerApp` 上で右クリックして、`[追加]-[Docker サポート]` をクリックします。
+
+   ![Visual Studio 2019 Docker サポートの追加](media/vs19_docker1.png)
 
 1. プロジェクトの種類に従い、`Dockerfile` が自動生成されプロジェクトに追加されます。
+
+   ![Visual Studio 2019 Dockerfile の自動生成](media/vs19_docker2.png)
 
 ## Dockerfile の概要
 
@@ -55,11 +67,13 @@ WORKDIR /inetpub/wwwroot
 COPY ${source:-obj/Docker/publish} .
 ```
 
-サンプルアプリケーションは、.NET Framework/ASP.NET を使用しているため、この `Dockerfile` は、[microsoft/aspnet](https://hub.docker.com/_/microsoft-dotnet-framework-aspnet) の基本イメージを使用しています。
+サンプルアプリケーションは、.NET Framework / ASP.NET を使用しているため、この `Dockerfile` は、[microsoft/aspnet](https://hub.docker.com/_/microsoft-dotnet-framework-aspnet) の基本イメージを使用しています。
 
 ## デバッグ
 
-ツールバーのデバッグ ドロップダウンから `[Docker]` を選択し、アプリのデバッグを開始します。 証明書の信頼を求めるメッセージが表示される場合があります。続行するには、証明書を信頼することを選びます。
+Visual Studio 2019 ツールバーの `[Docker]` をクリックして、アプリのデバッグを開始します。 証明書の信頼を求めるメッセージが表示される場合があります。続行するには、証明書を信頼することを選びます。
+
+![Visual Studio 2019 Docker コンテナーのデバッグ](media/vs19_docker_debug.png)
 
 `[出力]` ウィンドウの `[コンテナー ツール]` オプションに、実行されているアクションの内容が表示されます。 初めての場合、基本イメージのダウンロードにしばらく時間がかかる場合がありますが、以降の実行でははるかに高速になります。
 
@@ -79,37 +93,53 @@ IDE の [検索] ボックスを使用して (`Ctrl+Q` を押して使用)、 `[
 
 アプリの開発とデバッグのサイクルが完了後、リリース用の Docker イメージを作成して、`Azure Container Registry` に発行します。
 
-1. `ソリューション構成` ドロップダウンを `[Release]` に変更し、アプリを構築します。
-1. `ソリューション エクスプローラー` で対象のプロジェクトを右クリックし、 `[発行]` を選択します。
-1. `[発行]` ダイアログで `[Docker コンテナー レジストリ]` タブを選択します。
+1. `ソリューション構成` ドロップダウンを `[Release]` に変更し、ソリューションをビルドします。
+   > ビルドエラーになる場合には、メニューの `[ビルド]-[ソリューションのクリーン]` を実行してから、再度ビルドをおこなってください。
 
-   ![発行ダイアログのスクリーンショット - [Docker コンテナー レジストリ] を選択する](../../media/container-tools/vs-2019/docker-container-registry.png)
+1. `ソリューション エクスプローラー` でプロジェクト名 `AspnetWinContainerApp` を右クリックし、 `[発行]` を選択します。
 
-1. `[新しい Azure Container Registry を作成する]` を選択します。
+1. `[公開]` ダイアログで `[Docker Container Registry]` を選択して、`[次へ]` をクリックます。
 
-   ![発行ダイアログのスクリーンショット - [新しい Azure Container Registry を作成する] を選択する](../../media/container-tools/vs-2019/select-existing-or-create-new-azure-container-registry.png)
+   ![公開ダイアログ - コンテナー レジストリの選択](media/vs19_acr1.png)
 
-1. `[新しい Azure コンテナー レジストリを作成する]` で、目的の値を入力します。
+1. 続いて `[Azure コンテナー レジストリ]` を選択して、`[次へ]` をクリックます。
+
+   ![公開ダイアログ - ACR の選択](media/vs19_acr2.png)
+
+1. 続いて、対象の Azure サブスクリプションを選択したのち、`[コンテナー レジストリ]` の右上にある `+` ボタンをクリックして、を選択します。
+
+   ![公開ダイアログ - ACR の選択](media/vs19_acr3.png)
+
+1. `[Azure Container Registry 新規作成]` ダイアログで、以下の値を入力します。
+
+   ![公開ダイアログ - ACR 新規作成](media/vs19_acr4.png)
+
 
     | 設定      | 推奨値  | 説明                                |
     | ------------ |  ------- | -------------------------------------------------- |
-    | **DNS プレフィックス** | グローバルに一意の名前 | コンテナー レジストリを一意に識別する名前。 |
-    | **サブスクリプション** | サブスクリプションの選択 | 使用する Azure サブスクリプション。 |
-    | **[リソース グループ](/azure/azure-resource-manager/resource-group-overview)** | myResourceGroup |  コンテナー レジストリを作成するリソース グループの名前。 新しいリソース グループを作成する場合は、 **[新規]** を選択します。|
-    | **[SKU](/azure/container-registry/container-registry-skus)** | 標準 | コンテナー レジストリのサービス層  |
-    | **レジストリの場所** | 近くの場所 | [[地域]](https://azure.microsoft.com/regions/) で、自分に近いか、またはコンテナー レジストリを使用する他のサービスに近い場所を選択します。 |
-
-    ![Visual Studio の Azure コンテナー レジストリを作成するダイアログ][0]
+    | **DNS プレフィックス** | グローバルに一意の名前 | コンテナー レジストリを一意に識別する名前 |
+    | **サブスクリプション** | サブスクリプションの選択 | 使用する Azure サブスクリプション |
+    | **[リソース グループ](/azure/azure-resource-manager/resource-group-overview)** | AspnetWinContainer-rg |  コンテナー レジストリを作成するリソース グループの名前。新しいリソース グループを作成する場合は、 `[新規]` を選択します |
+    | **[SKU](/azure/container-registry/container-registry-skus)** | Basic | コンテナー レジストリのサービス層  |
+    | **レジストリの場所** | Japan East | [[地域]](https://azure.microsoft.com/regions/) で近い場所、またはコンテナー レジストリを使用する他のサービスに近い場所を選択します |
 
 1. `[作成]` をクリックします。 これで `[発行]` ダイアログに作成したレジストリが表示されます。
 
-   ![発行ダイアログのスクリーンショット。作成した Azure Container Registry を確認できます](../../media/container-tools/vs-2019/created-azure-container-registry.png)
+   ![公開ダイアログ - 作成された ACR](media/vs19_acr5.png)
 
-1. `[完了]` を選択し、Azure で新しく作成したレジストリにコンテナー イメージを発行するプロセスを完了します。
+1. `[完了]` をクリックすると、作成した Azure Container Registry (ACR) へ Docker コンテナー イメージを発行するためのプロファイルが作成され、Visual Studio 2019 のウィンドウに表示されます。
 
-   ![発行の成功を示すスクリーンショット](../../media/container-tools/vs-2019/publish-succeeded.png)
+   ![Visual Studio - ACR 発行プロファイル](media/vs19_acr6.png)
 
-これでレジストリからコンテナーを、[Azure App Service](https://docs.microsoft.com/ja-jp/azure/app-service/quickstart-custom-container?pivots=container-windows) や、[Azure Kubernetes Service (AKS)](https://docs.microsoft.com/ja-jp/azure/aks/windows-container-cli) などの Windows Container イメージを実行できるサービスにデプロイできるようになりました。
+1. `[発行]` をクリックすると、コンテナー イメージがビルドされたのちに、コマンドウィンドウで Docker CLI ツールを通して、Azure Container Registry (ACR) にイメージがプッシュされます。
+
+   ![ACR へ発行](media/vs19_acr7.png)
+
+1. Web ブラウザーで Azure ポータルを開き、`コンテナー レジストリ` サービスで、作成したレジストリ名の `リポジトリ` に、正常にコンテナー イメージがプッシュされているか確認します。
+
+   ![Azure ポータル - ACR](media/vs19_acr_portal.png)
+
+1. これでレジストリからコンテナーを、[Azure App Service](https://docs.microsoft.com/ja-jp/azure/app-service/quickstart-custom-container?pivots=container-windows) や、[Azure Kubernetes Service (AKS)](https://docs.microsoft.com/ja-jp/azure/aks/windows-container-cli) などの Windows Container イメージを実行できるサービスにデプロイできるようになりました。
 
 ## Docker CLI の操作
 
@@ -124,32 +154,31 @@ docker images
 
 ```console
 C:\>docker images
-REPOSITORY                                    TAG                              IMAGE ID            CREATED             SIZE
-akirainaks.azurecr.io:443/AspnetWinContainerApp   20201203003554                   5c9baf1c1445        5 days ago          8.41GB
-AspnetWinContainerApp                             latest                           5c9baf1c1445        5 days ago          8.41GB
-AspnetWinContainerApp                             dev                              2549f8a4d385        7 days ago          8.38GB
-mcr.microsoft.com/dotnet/aspnet               5.0                              7e2f94b6b184        3 weeks ago         353MB
-mcr.microsoft.com/dotnet/framework/aspnet     4.8-windowsservercore-ltsc2019   4d714b4a56de        3 months ago        8.37GB
+REPOSITORY                                                    TAG                              IMAGE ID            CREATED             SIZE
+aspnetwincontainerapps.azurecr.io:443/aspnetwincontainerapp   latest                           b5015e21ef80        12 minutes ago      8.41GB
+aspnetwincontainerapp                                         latest                           b5015e21ef80        12 minutes ago      8.41GB
+aspnetwincontainerapp                                         dev                              f00c953e1659        About an hour ago   8.38GB
+mcr.microsoft.com/dotnet/aspnet                               5.0                              7e2f94b6b184        4 weeks ago         353MB
+mcr.microsoft.com/dotnet/framework/aspnet                     4.8-windowsservercore-ltsc2019   4d714b4a56de        3 months ago        8.37GB
 ```
 
 続いて、下記の `docker run` コマンドでは、指定した Docker コンテナー イメージを名前 `wincon1` で実行します。併せて、Windows 用の Web サーバーである IIS (Internet Information Services) サービス `w3svc` を起動します。
 
 ```console
-docker run -it --entrypoint cmd --name wincon1 AspnetWinContainerApp:latest /c "start /B C:\ServiceMonitor.exe w3svc"
+docker run -it --entrypoint cmd --name wincon1 aspnetwincontainerapp:latest /c "start /B C:\ServiceMonitor.exe w3svc"
 ```
 
-続いて、下記の `docker ps` コマンドでは、Docker コンテナーを列挙します。
+続いて、下記の `docker ps -a` コマンドでは、Docker コンテナーを列挙します。
 
 ```console
-docker ps
+docker ps -a
 ```
 
-下記は `docker ps` の実行結果の出力例です。`docker run` コマンドで実行した Docker コンテナーの ID や名前、ステータスなどを確認することができます。
+下記は `docker ps -a` の実行結果の出力例です。`docker run` コマンドで実行した Docker コンテナーの ID や名前、ステータスなどを確認することができます。
 
 ```console
-C:\>docker ps
-CONTAINER ID        IMAGE                      COMMAND                  CREATED              STATUS              PORTS               NAMES
-107c9307b3ba        AspnetWinContainerApp:latest   "cmd /c 'start /B C:…"   About a minute ago   Up 56 seconds       80/tcp              wincon1
+C:\>docker ps -a
+CONTAINER ID        IMAGE                          COMMAND                  CREATED              STATUS              PORTS               NAMESf832a6d63858        aspnetwincontainerapp:latest   "cmd /c 'start /B C:…"   About a minute ago   Up About a minute   80/tcp              wincon1
 ```
 
 続く、下記の `docker exec` コマンドでは、実行中の Docker コンテナーでコマンド `powershell` を実行します。
@@ -158,7 +187,7 @@ CONTAINER ID        IMAGE                      COMMAND                  CREATED 
 docker exec -it wincon1 powershell
 ```
 
-下記は `docker exec` の実行結果例です。実行中の Docker コンテナー内で PowerShell が実行され、各種コマンド (`ls` など) を実行することができます。また、`exec` で PowerShell を終了します。
+下記は `docker exec` の実行結果例です。実行中の Docker コンテナー内で PowerShell が実行され、各種コマンド (`ls` など) を実行することができます。また、`exit` で PowerShell を終了します。
 
 ```console
 Windows PowerShell
@@ -172,15 +201,16 @@ PS C:\inetpub\wwwroot> ls
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
-d-----        12/3/2020   9:35 AM                bin
-d-----        12/3/2020   9:35 AM                Content
-d-----        12/3/2020   9:35 AM                fonts
-d-----        12/3/2020   9:35 AM                Scripts
-d-----        12/3/2020   9:35 AM                Views
--a----        12/1/2020   3:32 PM           9079 ApplicationInsights.config
--a----        9/30/2020   9:00 PM          32038 favicon.ico
--a----        9/30/2020   9:00 PM            109 Global.asax
--a----        12/3/2020   9:35 AM           5548 Web.config
+d-----        12/9/2020  12:15 PM                bin
+d-----        12/9/2020  12:15 PM                Content
+d-----        12/9/2020  12:15 PM                fonts
+d-----        12/9/2020  12:15 PM                Scripts
+d-----        12/9/2020  12:15 PM                Views
+-a----        12/9/2020  11:05 AM           9079 ApplicationInsights.config
+-a----        12/9/2020  11:05 AM          32038 favicon.ico
+-a----        12/9/2020  11:05 AM            113 Global.asax
+-a----        12/9/2020  12:15 PM           5548 Web.config
+
 
 PS C:\inetpub\wwwroot> exit
 
