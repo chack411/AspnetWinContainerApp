@@ -9,7 +9,7 @@ Azure Kubernetes Service (AKS) は Azure でマネージドな Kubernetes クラ
 
 AKS クラスターを作成し、Windows のノードプールを追加します
 
-シェルを起動し、Azure CLIの`az aks create`を使用して AKS クラスターを作成します。 次の例では、`<myResourceGroup>` という名前のリソース グループに `<myAKSCluster>` という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ](container-tools.md)でAzure Container Registoryで作成したものと同じものを利用します。次の例ではリージョンが指定されず、AKS クラスターは指定したリソースグループのリージョンで作成されます。また、ACRからイメージをプルできるように、 AKSにACRをアタッチするオプションが付与されています。前のワークショップで作成したACRの名前を `<acrName>`に入力してください。
+シェルを起動し、Azure CLIの`az aks create`を使用して AKS クラスターを作成します。 次の例では、`<myResourceGroup>` という名前のリソース グループに `<myAKSCluster>` という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ](container-tools.md)でACR用に作成したリソースグループと同じものを利用します。次のコマンドではリージョンが指定されていませんので、AKS クラスターは指定したリソースグループのリージョンで作成されます。また、ACRからイメージをプルできるように、 AKSにACRをアタッチするオプション`--attach-acr`が付与されています。前のワークショップで作成したACRの名前を `<acrName>`に入力してください。
 
 ```azurecli
 az aks create \
@@ -24,7 +24,7 @@ az aks create \
 #    --network-plugin azure
     --attach-acr <acrName>
 ```
-作成したAKSクラスターでAzure Monitorを有効化するため、--enable-addonsオプションを追加していますが、AKSクラスター作成後に有効化することも可能です。他にも多数のオプションを指定できます。az aks createの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
+作成したAKSクラスターでAzure Monitorを有効化するため、`--enable-addons`オプションを追加していますが、AKSクラスター作成後に有効化することも可能です。他にも多数のオプションを指定できます。`az aks create`コマンドの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
 
 デプロイにはしばらく時間がかかります。デプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
 
@@ -72,6 +72,96 @@ az aks get-credentials --resource-group <myResourceGroup> --name <myAKSCluster>
 ```
 $ kubectl get nodes -o wide
 ```
+
+コマンドを実行すると、AKSクラスターのノードとして、LinuxのノードとWindowsのノードがそれぞれ１台ずつ稼働しているのが確認できます。
+
+## AKSクラスターへのWindowsコンテナーのデプロイ
+
+kubectlを利用して[前のワークショップ](container-tools.md)で作成したWindowsコンテナーイメージをAKSクラスターにデプロイします。
+Kubernetesでのコンテナーのデプロイなど、様々なオブジェクトを作成するために、マニフェスト(yamlファイル）を作成します。下記はWindowsコンテナーをデプロイするDepolymentオブジェクトのマニフェストになります。<acrName>はWindowsコンテナーイメージが保存されているACRの名前に置き換えてください。
+
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: winaspnetapp
+  labels:
+    app: winaspnetapp
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: winaspnetapp
+      labels:
+        app: winaspnetapp
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": windows
+      containers:
+      - name: winaspnetapp
+        image: <acrName>.azurecr.io/aspnetwincontainerapp:latest
+        resources:
+          limits:
+            cpu: 1
+            memory: 800M
+          requests:
+            cpu: .1
+            memory: 300M
+        ports:
+          - containerPort: 80
+  selector:
+    matchLabels:
+      app: winaspnetapp
+EOF
+```
+
+このマニフェストにより、Windowsコンテナーイメージ`aspnetwincontainerapp:latest`を用いたpodが２つ、AKSクラスターにデプロイされます。注意すべき点は、このpodはWindowsノードでのみ稼働できる点です。AKSクラスターにはLinuxノードも稼働しているため、このpodをWindowsノードでのみスケジュールする必要があります。このために、マニフェストに`nodeSelector`として`"kubernetes.io/os": windows`のラベルが指定されています。これにより、podはこのラベルを持つwindowsノードにの実行されます。
+下記のコマンドでAKSのノードに設定されたラベルが確認できます。
+
+```
+kubectl get node --show-labels
+```
+
+適切なノードにうまくpodがスケジュールされるようにする別の方法としては、`taint`を利用する方法があります。主にWindowsノードのみを利用する場合、Linuxノードに`taint`を設定することで、`toleration`が設定されていないpodはWindowsノードでのみ実行するようにできます。詳細は[こちら](https://kubernetes.io/ja/docs/concepts/scheduling-eviction/taint-and-toleration/)を参照ください。
+
+## WindowsコンテナーアプリのAKSクラスター外部への公開
+
+AKSにWindowsコンテナーのデプロイがきましたので、次にアプリを外部のクライアント環境からアクセスできるようにします。このためにKubernetesのserviceオブジェクトを次のマニフェストを用いて作成します。
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: winaspnetapp
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: winaspnetapp
+EOF
+```
+
+次のコマンドで、作成されたserviceオブジェクトを確認します。
+
+```
+kubectl get service -w
+
+```
+
+上記コマンドの`-w`オプションで継続的に状態を確認できます。しばらくすると`EXTERNAL-IP`に値がパブリックIPアドレス表示されるので、ブラウザを開いて表示されたIPアドレスに接続してください。
+
+画像
+
+無事にWindowsコンテナーのアプリに接続できていることが確認できます。
+
+## podのスケーリング
+
+
 
 
 追加のチュートリアルでは、このアプリケーションがスケールアウトされて更新されます。
