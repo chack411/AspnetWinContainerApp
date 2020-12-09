@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linuxaspnetcoreapp
+  labels:
+    app: linuxaspnetcoreapp
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: linuxaspnetcoreapp
+      labels:
+        app: linuxaspnetcoreapp
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: linuxaspnetcoreapp
+        image: akirainaks.azurecr.io/chackblazorsentiment:725
+        resources:
+          limits:
+            cpu: 1
+            memory: 800M
+          requests:
+            cpu: .1
+            memory: 300M
+        ports:
+          - containerPort: 80
+  selector:
+    matchLabels:
+      app: linuxaspnetcoreapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: linuxaspnetcoreapp
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: linuxaspnetcoreapp
