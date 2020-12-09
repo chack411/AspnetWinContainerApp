@@ -9,7 +9,7 @@ Azure Kubernetes Service (AKS) は Azure でマネージドな Kubernetes クラ
 
 AKS クラスターを作成し、Windows のノードプールを追加します
 
-シェルを起動し、Azure CLIの`az aks create`を使用して AKS クラスターを作成します。 次の例では、*<myResourceGroup>* という名前のリソース グループに *<myAKSCluster>* という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ][container-tools.md]でAzure Container Registoryで作成したものと同じものを利用します。次の例ではリージョンが指定されず、AKS クラスターは指定したリソースグループのリージョンで作成されます。また、ACRからイメージをプルできるように、 AKSにACRをアタッチするオプションが付与されています。前のワークショップで作成したACRの名前を *<acrName>*に入力してください。
+シェルを起動し、Azure CLIの`az aks create`を使用して AKS クラスターを作成します。 次の例では、`<myResourceGroup>` という名前のリソース グループに `<myAKSCluster>` という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ](container-tools.md)でAzure Container Registoryで作成したものと同じものを利用します。次の例ではリージョンが指定されず、AKS クラスターは指定したリソースグループのリージョンで作成されます。また、ACRからイメージをプルできるように、 AKSにACRをアタッチするオプションが付与されています。前のワークショップで作成したACRの名前を `<acrName>`に入力してください。
 
 ```azurecli
 az aks create \
@@ -23,8 +23,7 @@ az aks create \
 
 デプロイにはしばらく時間がかかります。デプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
 
-> [!NOTE]
-> クラスターが確実に動作するようにするには、少なくとも 2 つのノードを実行する必要があります。
+> [Note] クラスターが確実に動作するようにするには、少なくとも 2 つのノードを実行する必要があります。
 
 ## Windowsノードプールの追加
 
