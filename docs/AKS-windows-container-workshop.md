@@ -3,50 +3,32 @@
 Azure Kubernetes Service (AKS) は Azure でマネージドな Kubernetes クラスターを利用できるサービスです。 Window コンテナーをサポートしており、コンテナー化された .NET アプリを pod としてデプロイして、自動回復やスケールアウトなど、柔軟な運用が可能です。このワークショップでは、 Windows ノードを含む AKS クラスターを作成し、 ASP .NET　アプリをpodしてデプロイし、サービスの公開やスケーリング、およびAzure Monitorと連携したコンテナーの監視を実施します。
 
 ## 前提事項
-本ワークショップは[ASP.NET と Windows Containers ワークショップ](container-tools.md)の実施を前提としており、このワークショップで作成したAzure Container RegistryやASP .NETコンテナーイメージを利用します。
+本ワークショップは[ASP.NET と Windows Containers ワークショップ](container-tools.md)の実施を前提としており、このワークショップで作成したAzure Container Registry(ACR)やASP .NETコンテナーイメージを利用します。
 
-## AKS クラスターのデプロイ
+## AKS クラスターの作成
 
 AKS クラスターを作成し、Windows のノードプールを追加します
 
-Kubernetes には、コンテナー化されたアプリケーション用の分散プラットフォームが用意されています。 AKS を使うと、運用開始準備の整った Kubernetes クラスターを迅速に作成できます。 このチュートリアル (7 部構成の第 部) では、Kubernetes クラスターを AKS にデプロイします。 学習内容は次のとおりです。
-
-> [!div class="checklist"]
-> * Azure Container Registry に対して認証できる Kubernetes AKS クラスターをデプロイする
-> * Kubernetes CLI (kubectl) をインストールする
-> * kubectl を構成して AKS クラスターに接続する
-
-追加のチュートリアルでは、Azure Vote アプリケーションをクラスターにデプロイし、スケーリングおよび更新します。
-
-## <a name="before-you-begin"></a>開始する前に
-
-これまでのチュートリアルでは、コンテナー イメージを作成して、Azure Container Registry インスタンスにアップロードしました。 これらの手順を完了しておらず、順番に進めたい場合は、[チュートリアル 1 - コンテナー イメージを作成する][aks-tutorial-prepare-app]に関するページから開始してください。
-
-このチュートリアルでは、Azure CLI バージョン 2.0.53 以降を実行している必要があります。 バージョンを確認するには、`az --version` を実行します。 インストールまたはアップグレードする必要がある場合は、[Azure CLI のインストール][azure-cli-install]に関するページを参照してください。
-
-## <a name="create-a-kubernetes-cluster"></a>Kubernetes クラスターを作成する
-
-AKS クラスターでは、Kubernetes のロールベースのアクセス制御 (RBAC) を使用できます。 これらのコントロールを使用すると、ユーザーに割り当てられているロールに基づいてリソースへのアクセスを定義できます。 ユーザーに複数のロールが割り当てられている場合は、アクセス許可が組み合わされます。また、アクセス許可のスコープを 1 つの名前空間またはクラスター全体に設定できます。 Azure CLI の既定では、AKS クラスターを作成するときに RBAC が自動的に有効になります。
-
-[az aks create][] を使用して AKS クラスターを作成します。 次の例では、*myResourceGroup* という名前のリソース グループに *myAKSCluster* という名前のクラスターを作成します。 このリソース グループは、[前のチュートリアル][aks-tutorial-prepare-acr]で作成しました ("*米国東部*" リージョン)。 次の例ではリージョンが指定されず、AKS クラスターも "*米国東部*" リージョンで作成されます。 AKS のリソース制限とリージョン可用性に関する詳細については、「[Azure Kubernetes Service (AKS) のクォータ、仮想マシンのサイズの制限、利用可能なリージョン][quotas-skus-regions]」を参照してください。
-
-AKS クラスターが他の Azure リソースと対話できるようにするために、Azure Active Directory のサービス プリンシパルが自動的に作成されます (指定しなかったため)。 この場合、このサービス プリンシパルは、前のチュートリアルで作成した Azure Container Registry (ACR) インスタンスから[イメージをプルする権利を付与][container-registry-integration]されます。 管理しやすくするために、サービス プリンシパルの代わりに[マネージド ID](use-managed-identity.md) を使用することもできることに注意してください。
+シェルを起動し、Azure CLIの`az aks create`を使用して AKS クラスターを作成します。 次の例では、*<myResourceGroup>* という名前のリソース グループに *<myAKSCluster>* という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ][container-tools.md]でAzure Container Registoryで作成したものと同じものを利用します。次の例ではリージョンが指定されず、AKS クラスターは指定したリソースグループのリージョンで作成されます。また、ACRからイメージをプルできるように、 AKSにACRをアタッチするオプションが付与されています。前のワークショップで作成したACRの名前を *<acrName>*に入力してください。
 
 ```azurecli
 az aks create \
-    --resource-group myResourceGroup \
-    --name myAKSCluster \
+    --resource-group <myResourceGroup> \
+    --name <myAKSCluster> \
     --node-count 2 \
     --generate-ssh-keys \
     --attach-acr <acrName>
 ```
+他にも多数のオプションを指定できます。az aks createの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
 
-ACR からイメージをプルするようにサービス プリンシパルを手動で構成することもできます。 詳細については、[サービス プリンシパルによる ACR 認証](../container-registry/container-registry-auth-service-principal.md)または[プル シークレットを使用した Kubernetes からの認証](../container-registry/container-registry-auth-kubernetes.md)に関するページを参照してください。
-
-数分してデプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
+デプロイにはしばらく時間がかかります。デプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
 
 > [!NOTE]
 > クラスターが確実に動作するようにするには、少なくとも 2 つのノードを実行する必要があります。
+
+## Windowsノードプールの追加
+
+AKS
 
 ## <a name="install-the-kubernetes-cli"></a>Kubernetes CLI のインストール
 
