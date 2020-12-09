@@ -42,7 +42,7 @@ az aks nodepool list \
     -o table
 ```
 
-今回はWindowsコンテナーを利用するため、Windowsのノードプールを追加します。ノードプールの追加には、`az aks nodepool add`コマンドを利用します。下記のコマンドでは、npwinという名前のWindows Serverノードプールを１台、AKSクラスターに追加します。
+今回はWindowsコンテナーを利用するため、Windowsのノードプールを追加します。ノードプールの追加には、`az aks nodepool add`コマンドを利用します。下記のコマンドでは、`npwin`という名前のWindows Serverノードプールを１台、AKSクラスターに追加します。
 
 ```
 az aks nodepool add \
@@ -55,32 +55,22 @@ az aks nodepool add \
 
 ノードの追加にはしばらく時間がかかります。`az aks nodepool add`コマンドのオプションでVMのサイズなども指定できます。詳しくは[こちらのドキュメント](https://docs.microsoft.com/en-us/cli/azure/aks/nodepool?view=azure-cli-latest#az_aks_nodepool_add)を参照ください。
 
+ノードの追加が完了したら、再び`az aks nodepool list`コマンドで状態を確認してみましょう。`npwin`という名前のWindowsノードプールが追加されていることが確認できます。
 
-## <a name="install-the-kubernetes-cli"></a>Kubernetes CLI のインストール
+## kubectl を使用したクラスターへの接続
 
-お使いのローカル コンピューターから Kubernetes クラスターに接続するには、[kubectl][kubectl] (Kubernetes コマンドライン クライアント) を使用します。
-
-Azure Cloud Shell を使用している場合、`kubectl` は既にインストールされています。 [az aks install-cli][] コマンドを使用してローカルにインストールすることもできます。
-
-```azurecli
-az aks install-cli
-```
-
-## <a name="connect-to-cluster-using-kubectl"></a>kubectl を使用したクラスターへの接続
-
-Kubernetes クラスターに接続するように `kubectl` を構成するには、[az aks get-credentials][] コマンドを使用します。 次の例では、*myResourceGroup* の *myAKSCluster* という名前の AKS クラスターの資格情報を取得します。
+ここからは、Kubernetesの標準のコマンドラインツールである[kubectl](https://kubernetes.io/ja/docs/reference/kubectl/overview/)を用いて、Kubernetesを操作していきます。
+Kubernetes クラスターに接続するように `kubectl` を構成するには、`az aks get-credentials`コマンドを使用します。 
 
 ```azurecli
-az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+az aks get-credentials --resource-group <myResourceGroup> --name <myAKSCluster>
 ```
+このコマンドの実行により、クライアント環境にKubernetesに接続するための接続設定ファイルが作成されます。
 
-クラスターへの接続を確認するには、クラスター ノードの一覧を返す [kubectl get nodes][kubectl-get] コマンドを実行します。
+クラスターへの接続を確認するには、クラスター ノードの一覧を返す `kubectl get nodes` コマンドを実行します。
 
 ```
-$ kubectl get nodes
-
-NAME                       STATUS   ROLES   AGE   VERSION
-aks-nodepool1-12345678-0   Ready    agent   32m   v1.14.8
+$ kubectl get nodes -o wide
 ```
 
 
