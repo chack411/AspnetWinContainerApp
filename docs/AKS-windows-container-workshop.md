@@ -28,7 +28,7 @@ az aks create \
 
 デプロイにはしばらく時間がかかります。デプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
 
-> 今回は実験用に1台のノードを指定していますが、が確実に動作するようにするには、少なくとも 3 つのノードの実行が望ましい構成です。
+> 今回は実験用に1台のノードを指定していますが、確実に動作するようにするには、少なくとも 3 つのノードの実行が望ましい構成です。
 
 ## Windowsノードプールの追加
 
@@ -75,10 +75,10 @@ $ kubectl get nodes -o wide
 
 コマンドを実行すると、AKSクラスターのノードとして、LinuxのノードとWindowsのノードがそれぞれ１台ずつ稼働しているのが確認できます。
 
-## AKSクラスターへのWindowsコンテナーのデプロイ
+## Windowsコンテナーのデプロイ
 
 kubectlを利用して[前のワークショップ](container-tools.md)で作成したWindowsコンテナーイメージをAKSクラスターにデプロイします。
-Kubernetesでのコンテナーのデプロイなど、様々なオブジェクトを作成するために、マニフェスト(yamlファイル）を作成します。下記はWindowsコンテナーをデプロイするDepolymentオブジェクトのマニフェストになります。<acrName>はWindowsコンテナーイメージが保存されているACRの名前に置き換えてください。
+Kubernetesでのコンテナーのデプロイなど、様々なオブジェクトを作成するために、マニフェスト(yamlファイル）を作成します。下記はWindowsコンテナーをデプロイするDepolymentオブジェクトのマニフェストになります。 `<acrName>`はWindowsコンテナーイメージが保存されているACRの名前に置き換えてください。
 
 
 ```
@@ -130,14 +130,15 @@ EOF
 ```
 [yamlファイル](../aks-deploy-win.yaml) - `kubectl apply -f <yaml-file-name>`
 
-このマニフェストにより、Windowsコンテナーイメージ`aspnetwincontainerapp:latest`を用いたpodが２つ、AKSクラスターにデプロイされます。注意すべき点は、このpodはWindowsノードでのみ稼働できる点です。AKSクラスターにはLinuxノードも稼働しているため、このpodをWindowsノードでのみスケジュールする必要があります。このために、マニフェストに`nodeSelector`として`"kubernetes.io/os": windows`のラベルが指定されています。これにより、Windowsコンテナーはこのラベルを持つwindowsノードにの実行されます。
+AKSではコンテナーはpodという単位で実行されます。このマニフェストにより、Windowsコンテナーイメージ`aspnetwincontainerapp:latest`を用いたpodが２つ、AKSクラスターにデプロイされます。注意すべき点は、このpodはWindowsノードでのみ稼働できる点です。AKSクラスターにはLinuxノードも稼働しているため、このpodをWindowsノードでのみスケジュールする必要があります。このために、マニフェストに`nodeSelector`として`"kubernetes.io/os": windows`のラベルが指定されています。これにより、Windowsコンテナーはこのラベルを持つwindowsノードにの実行されます。
 
 下記のコマンドでAKSのノードに設定されたラベルが確認できます。
 
 ```
 kubectl get node --show-labels
 ```
-Windwosコンテナーはpodという単位でAKS上で実行されます。先ほどWindowsコンテナーをデプロイしたときに利用したマニフェストでは、podのレプリカを 2 つ作成しました。 AKSクラスターに存在するpodの数と状態を確認するため、`kubectl get`コマンドを使用します
+
+先ほどWindowsコンテナーをデプロイしたときに利用したマニフェストでは、podのレプリカを 2 つ作成しました。 AKSクラスターに存在するpodの数と状態を確認するため、`kubectl get`コマンドを使用します
 
 ```console
 kubectl get pods -o wide
@@ -236,4 +237,11 @@ az aks nodepool list \
     -o table
 ```
 
-このように、podの
+このように、AKSで稼働するアプリの負荷に合わせて、ノード数も容易に増減させることができます。
+
+## podのコンテナーイメージのバージョンアップ
+
+アプリ開発
+
+
+
