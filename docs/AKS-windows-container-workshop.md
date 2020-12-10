@@ -292,30 +292,18 @@ kubectl get pods
 
 portal.azure.comを開き、画面上部の検索ボックスでモニターと入力すると、Azure Monitorのアイコンが下に表示されます。これをクリックして、Azure Monitorのトップ画面に移動します。
 
-画像
+![Azure Monitor1](media/azmon1.png)
 
 左側に並ぶメニューのうち、`コンテナー`とクリックします。右側ペインの`監視対象クラスター`をクリックすると、Azure Monitorが有効となっているKubernetesクラスター一覧が表示されますので、今回作成したAKSkクラスターをクリックします。
 
-画像
+![Azure Monitor2](media/azmon2.png)
 
 画面上に、AKSクラスターのCPUやメモリの利用状況などが表示されます。`ノード` `コンテナー`などをクリックすると、それぞれの詳細が表示されます。`コンテナー`画面では、個別のコンテナのライブログを`ライブデータの表示（プレビュー）`からも確認できます。
 
-画面
+![Azure Monitor3](media/azmon3.png)
 
 AKSのログやメトリックをもとに特定の条件でアラート通知を実施することも可能です。同じ画面の上部に`奨励されるアラート（プレビュー）`をクリックすると、AKSの監視に適したアラートルール一覧が表示され、すぐに有効にすることができます。
 
 以上でワークショップは終了です。お疲れ様でした。
 
-## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
-
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
