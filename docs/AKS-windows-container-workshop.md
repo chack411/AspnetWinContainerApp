@@ -116,6 +116,7 @@ spec:
       app: winaspnetapp
 EOF
 ```
+[yamlファイル](../aks-deploy-win.yaml) - `kubectl apply -f <yaml-file-name>~
 
 このマニフェストにより、Windowsコンテナーイメージ`aspnetwincontainerapp:latest`を用いたpodが２つ、AKSクラスターにデプロイされます。注意すべき点は、このpodはWindowsノードでのみ稼働できる点です。AKSクラスターにはLinuxノードも稼働しているため、このpodをWindowsノードでのみスケジュールする必要があります。このために、マニフェストに`nodeSelector`として`"kubernetes.io/os": windows`のラベルが指定されています。これにより、podはこのラベルを持つwindowsノードにの実行されます。
 下記のコマンドでAKSのノードに設定されたラベルが確認できます。
@@ -145,6 +146,7 @@ spec:
     app: winaspnetapp
 EOF
 ```
+[yamlファイル](../aks-svc.yaml) - `kubectl apply -f <yaml-file-name>~
 
 次のコマンドで、作成されたserviceオブジェクトを確認します。
 
