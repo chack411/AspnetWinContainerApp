@@ -140,7 +140,7 @@ kubectl get node --show-labels
 
 先ほどWindowsコンテナーをデプロイしたときに利用したマニフェストでは、podのレプリカを 2 つ作成しました。 AKSクラスターに存在するpodの数と状態を確認するため、`kubectl get`コマンドを使用します
 
-```console
+```
 kubectl get pods -o wide
 ````
 
@@ -186,18 +186,18 @@ kubectl get service -w
 
 先ほどWindowsコンテナーをデプロイしたときにpodのレプリカを 2 つ作成しました。 もう一度podの数と状態を確認してみます
 
-```console
+```
 kubectl get pods
 ````
 
 podの数を手動で変更するには、`kubectl scale`コマンドを使います。 次の例では、podの数を 3 に増やしています。
 
-```console
+```
 kubectl scale --replicas=3 deployment/winaspnetapp
 ```
 AKS によって追加のポッドが作成されていることを確認するために、もう一度 `kubectl get pods` を実行します。 
 
-```console
+```
 kubectl get pods
 ```
 
@@ -219,7 +219,7 @@ kubectl top pods
 AKS クラスターには現在Windowsノードが 1 つあります。 AKS クラスターのpodを増減する場合は、ノードの数を手動で調整できます。
 次の例では、AKS クラスターのノードの数を 3 に増やしています。 コマンドが完了するまでに数分かかります。
 
-```azurecli
+```
 az aks nodepool scale \
     --resource-group <myResourceGroup> \
     --cluster-name <myAKSCluster> \
@@ -249,7 +249,7 @@ kubectl set image deployment/winaspnetapp winaspnetapp=<acrName>.azurecr.io/aspn
 
 しかし実際に上記に指定したコンテナイメージはACRに保存されていませんので、エラーとなります。下記のコマンドで状況を確認してみます。
 
-```console
+```
 kubectl get pods
 ```
 
@@ -269,7 +269,7 @@ kubectl rollout undo deployment/winaspnetapp
 
 もう一度状態を確認すると、無事にpodが全て稼働しているのが確認できます。
 
-```console
+```
 kubectl get pods
 ```
 
@@ -283,7 +283,7 @@ kubectl delete pod/<podName>
 
 もう一度、稼働しているpodを確認してみましょう。
 
-```console
+```
 kubectl get pods
 ```
 停止したpodは削除されていますが、新たなpodがデプロイされていることが確認できます。今回利用したマニフェストには、`livenessProbe`を定義しています。これにより、定期的にpodの状態を確認し、問題があれば自動的に停止して再起動することで、自動回復することができます。
@@ -304,4 +304,4 @@ portal.azure.comを開き、画面上部の検索ボックスでモニターと�
 
 AKSのログやメトリックをもとに特定の条件でアラート通知を実施することも可能です。同じ画面の上部に`奨励されるアラート（プレビュー）`をクリックすると、AKSの監視に適したアラートルール一覧が表示され、すぐに有効にすることができます。
 
-以上でワークショップは終わりです。お疲れ様でした。
+以上でワークショップは終了です。お疲れ様でした。
