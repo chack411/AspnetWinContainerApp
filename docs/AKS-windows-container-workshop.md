@@ -295,7 +295,7 @@ portal.azure.comを開き、画面上部の検索ボックスでモニターと�
 ![Azure Monitor1](media/azmon1.png)
 
 
-左側に並ぶメニューのうち、`コンテナー`とクリックします。右側ペインの`監視対象クラスター`をクリックすると、Azure Monitorが有効となっているKubernetesクラスター一覧が表示されますので、今回作成したAKSkクラスターをクリックします。
+左側に並ぶメニューのうち、`コンテナー`とクリックします。右側ペインの`監視対象クラスター`をクリックすると、Azure Monitorが有効となっているKubernetesクラスター一覧が表示されますので、今回作成したAKSクラスターをクリックします。
 
 
 ![Azure Monitor2](media/azmon2.png)
