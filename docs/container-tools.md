@@ -12,6 +12,7 @@ Visual Studio を使用すると、コンテナー化された .NET、ASP.NET、
 * [Visual Studio 2019](https://visualstudio.microsoft.com/downloads) 
 
 > Visual Studio 2019 のインストールでは次のワークロードと個別コンポーネントのインストールが必要です。
+> 
 > ### ワークロード
 > - `ASP.NET と Web 開発`
 > - `Azure の開発`
@@ -28,7 +29,9 @@ Visual Studio を使用すると、コンテナー化された .NET、ASP.NET、
 > ![Visual Studio 2019 個別コンポーネント1](media/vs19_component2.png)
 >
 
-> Docker Desktop の実行には `Hyper-V` の有効化が必要です。`Windows の機能の有効化または無効化` で、`Hyper-V` のチェック ボックスがオンになっていない場合なっていない場合には、チェックを入れてから OK をクリックします。有効化が完了したら OS を再起動します。
+> ### Docker Desktop の 事前準備
+> 
+> Docker Desktop の実行には `Hyper-V` の有効化が必要です。`Windows の機能の有効化または無効化` で、`Hyper-V` のチェック ボックスがオンになっていない場合には、チェックを入れてから OK をクリックします。有効化が完了したら OS を再起動します。
 > 
 > ![Hyper-V の有効化](media/Enable_Hyper-V.png)
 > 
@@ -36,7 +39,7 @@ Visual Studio を使用すると、コンテナー化された .NET、ASP.NET、
 > ```PowerShell
 > Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 > ```
-
+> 
 > 続いて、Docker Desktop が起動していることを確認したのち、タスクトレイにある `Docker` アイコンを右クリックして、`Switch to Windows containers...` を選択し、Windows Containers モードに切り替えます。
 >
 > ![Switch to Windows Containers](media/Docker_WinContainers.png)
