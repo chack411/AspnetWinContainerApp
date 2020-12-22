@@ -109,19 +109,19 @@ spec:
             cpu: .1
             memory: 300M
         ports:
-          - containerPort: 80
-    　　　livenessProbe:
-      　　　httpGet:
-        　　　path: /
-        　　　port: 80
-           initialDelaySeconds: 10
-      　　　periodSeconds: 5
-         ReadinessProbe:
-           httpGet:
-        　　　path: /
-        　　　port: 80
-           initialDelaySeconds: 10
-      　　　periodSeconds: 5
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        ReadinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
   selector:
     matchLabels:
       app: winaspnetapp
