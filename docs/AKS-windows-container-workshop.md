@@ -116,7 +116,7 @@ spec:
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 5
-        ReadinessProbe:
+        readinessProbe:
           httpGet:
             path: /
             port: 80
