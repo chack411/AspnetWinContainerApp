@@ -20,7 +20,6 @@ az aks create \
     --enable-addons monitoring \
     --windows-admin-password <your-strong-password> \
     --windows-admin-username azureuser \
-#    --vm-set-type VirtualMachineScaleSets \
     --network-plugin azure \
     --attach-acr <acrName>
 ```
@@ -70,7 +69,7 @@ az aks get-credentials --resource-group <myResourceGroup> --name <myAKSCluster>
 クラスターへの接続を確認するには、クラスター ノードの一覧を返す `kubectl get nodes` コマンドを実行します。
 
 ```
-$ kubectl get nodes -o wide
+kubectl get nodes -o wide
 ```
 
 コマンドを実行すると、AKSクラスターのノードとして、LinuxのノードとWindowsのノードがそれぞれ１台ずつ稼働しているのが確認できます。
