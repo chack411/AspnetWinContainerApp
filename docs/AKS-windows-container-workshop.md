@@ -21,7 +21,7 @@ az aks create \
     --windows-admin-password <your-strong-password> \
     --windows-admin-username azureuser \
 #    --vm-set-type VirtualMachineScaleSets \
-#    --network-plugin azure \
+    --network-plugin azure \
     --attach-acr <acrName>
 ```
 作成したAKSクラスターでAzure Monitorを有効化するため、`--enable-addons`オプションを追加していますが、AKSクラスター作成後に有効化することも可能です。他にも多数のオプションを指定できます。`az aks create`コマンドの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
