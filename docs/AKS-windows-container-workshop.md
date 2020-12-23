@@ -288,7 +288,7 @@ kubectl get pods
 
 ## Azure Monitor for Containerによる監視
 
-portal.azure.comを開き、画面上部の検索ボックスでモニターと入力すると、Azure Monitorのアイコンが下に表示されます。これをクリックして、Azure Monitorのトップ画面に移動します。
+portal.azure.comを開き、画面上部の検索ボックスで`モニター`と入力すると、Azure Monitorのアイコンが下に表示されます。これをクリックして、Azure Monitorのトップ画面に移動します。
 
 
 ![Azure Monitor1](media/azmon1.png)
