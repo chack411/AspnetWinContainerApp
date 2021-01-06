@@ -1,7 +1,9 @@
 # ASP.NET と Windows Containers & AKS ワークショップ
 
-- [ASP.NET と Windows Containers](docs/container-tools.md)
-- [Windows Container の AKS へのデプロイ](docs/aks-xxxx.md)
+- [事前準備と Windows Container アプリケーションのローカル実行およびデバッグ](docs/container-tools.md)
+- [Azure Kubernetes Service (AKS) クラスターのデプロイ](docs/kubernetes-deploy-cluster.md)
+- [Azure Kubernetes Service (AKS) でのアプリケーションの実行](docs/kubernetes-deploy-application.md)
+- [Azure Kubernetes Service (AKS) でのアプリケーションのスケーリング](docs/kubernetes-deploy-scale.md)
 
 # Contributing
 

@@ -61,11 +61,15 @@ https://github.com/chack411/AspnetWinContainerApp.git
 
 ![Visual Studio 2019 リポジトリのクローン](media/vs19_clone.png)
 
-> または、コマンド プロンプトを開いて、サンプルソースコードをダウンロードしたいフォルダに移動したのち、次の git コマンドを実行したのち、クローンしたフォルダ内にある `AspnetWinContainerApp.sln` ファイルを Visual Studio 2019 で開きます。
+途中、`Git ユーザー情報` の入力を促すダイアログが表示された場合には、自身の名前とメールアドレスを入力して `保存` をクリックします。
 
-```console
-git clone https://github.com/chack411/AspnetWinContainerApp.git
-```
+![Git ユーザー情報の入力](media/vs19_git_config.png)
+
+> Visual Studio 2019 を使わずに、Git コマンドを使ってソースコードをダウンロードすることもできます。コマンド プロンプトを開いてサンプルソースコードをダウンロードしたいフォルダに移動し、次の git コマンドを実行します。リポジトリのクローンが完了したら、フォルダ内にある `AspnetWinContainerApp.sln` ファイルを Visual Studio 2019 で開きます。
+> 
+> ```console
+> git clone https://github.com/chack411/AspnetWinContainerApp.git
+> ```
 
 ## ローカル環境の開発用 IIS での実行
 
