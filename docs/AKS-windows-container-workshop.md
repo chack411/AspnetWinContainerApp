@@ -183,7 +183,7 @@ kubectl get service -w
 無事に Windows コンテナーのアプリに接続できていることが確認できます。
 Service リソースを AKS に作成することにより、 Azure の AKS 用のロードバランサーが自動的に構成され、外部から接続可能となります。
 
-## Windows コンテナーpodのスケーリング
+## Windows コンテナー pod のスケーリング
 
 先ほど Windows コンテナーをデプロイしたときに pod のレプリカを 2 つ作成しました。 もう一度 pod の数と状態を確認してみます
 
@@ -196,7 +196,7 @@ pod の数を手動で変更するには、 `kubectl scale` コマンドを利�
 ```
 kubectl scale --replicas=3 deployment/winaspnetapp
 ```
-AKS に追加のポッドが作成されていることを確認するために、もう一度 `kubectl get pods` を実行します。 
+AKS に追加の pod が作成されていることを確認するために、もう一度 `kubectl get pods` を実行します。 
 
 ```
 kubectl get pods
@@ -212,7 +212,7 @@ kubectl top pods
 
 各 pod の cpu やメモリーの利用状況が表示されます。
 
-> AKS は pod の[水平自動スケーリング(HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)をサポートしており、 CPU 利用率などの選ばれたメトリックに応じて、デプロイの pod 数を調整できます。 
+> AKS は pod の[水平自動スケーリング(HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)をサポートしており、 CPU 利用率などの選ばれたメトリックに応じて、デプロイする pod 数を自動調整できます。 
 
 
 ## AKS ノードの手動スケーリング
@@ -300,7 +300,7 @@ kubectl get pods
 ![Azure Monitor1](media/azmon1.png)
 
 
-左側に並ぶメニューのうち、`コンテナー`とクリックします。右側ペインの`監視対象クラスター`をクリックすると、 Azure Monitor が有効となっている Kubernetes クラスター一覧が表示されますので、今回作成した AKS クラスターをクリックします。
+左側に並ぶメニューのうち、`コンテナー`をクリックします。右側ペインの`監視対象クラスター`をクリックすると、 Azure Monitor が有効となっている Kubernetes クラスター一覧が表示されますので、今回作成した AKS クラスターをクリックします。
 
 
 ![Azure Monitor2](media/azmon2.png)
