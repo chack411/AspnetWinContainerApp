@@ -152,7 +152,6 @@ kubectl get pods -o wide
 AKS に Windows コンテナーのデプロイがきましたので、次にアプリを外部のクライアント環境からアクセスできるようにします。このために Kubernetes の Service リソースを次のマニフェストを用いて作成します。
 
 ```
-cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -164,7 +163,6 @@ spec:
     port: 80
   selector:
     app: winaspnetapp
-EOF
 ```
 マニフェストの [yamlファイル](../aks-svc.yaml)
 
