@@ -1,15 +1,15 @@
 # Azure Kubernetes Service と Windows Container ワークショップ
 
-Azure Kubernetes Service (AKS) は Azure でマネージドな Kubernetes クラスターを利用できるサービスです。 Window コンテナーをサポートしており、コンテナー化された .NET アプリを pod としてデプロイして、自動回復やスケールアウトなど、柔軟な運用が可能です。このワークショップでは、 Windows ノードを含む AKS クラスターを作成し、 ASP .NET　アプリをpodしてデプロイし、サービスの公開やスケーリング、およびAzure Monitorと連携したコンテナーの監視を実施します。
+Azure Kubernetes Service (AKS) は Azure でマネージドな Kubernetes クラスターを利用できるサービスです。 Window コンテナーをサポートしており、Windows コンテナー化された .NET アプリを pod としてデプロイして、自動回復やスケールアウトなど、柔軟な運用が可能です。このワークショップでは、 Windows ノードを含む AKS クラスターを作成し、 ASP .NET　アプリを pod としてデプロイし、サービスの公開やスケーリング、および Azure Monitor と連携したコンテナーの監視を実施します。
 
 ## 前提事項
-本ワークショップは[ASP.NET と Windows Containers ワークショップ](windows-container-tools-workshop.md)の実施を前提としており、このワークショップで作成したAzure Container Registry(ACR)やASP .NETコンテナーイメージを利用します。
+本ワークショップは [ASP.NET と Windows Containers ワークショップ](windows-container-tools-workshop.md)の実施を前提としており、このワークショップで作成した Azure Container Registry(ACR) や ASP .NET コンテナーイメージを利用します。
 
 ## AKS クラスターの作成
 
 AKS クラスターを作成し、Windows のノードプールを追加します
 
-シェルを起動し、Azure CLIの`az aks create`を使用して AKS クラスターを作成します。 次の例では、`<myResourceGroup>` という名前のリソース グループに `<myAKSCluster>` という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ](windows-container-tools-workshop.md)でACR用に作成したリソースグループと同じものを利用します。次のコマンドではリージョンが指定されていませんので、AKS クラスターは指定したリソースグループのリージョンで作成されます。また、ACRからイメージをプルできるように、 AKSにACRをアタッチするオプション`--attach-acr`が付与されています。前のワークショップで作成したACRの名前を `<acrName>`に入力してください。
+シェルを起動し、Azure CLI の `az aks create` を使用して AKS クラスターを作成します。 次の例では、 `<myResourceGroup>` という名前のリソース グループに `<myAKSCluster>` という名前のクラスターを作成します。 このリソース グループは、[前のワークショップ](windows-container-tools-workshop.md)で ACR 用に作成したリソースグループと同じものを利用します。次のコマンドではリージョンが指定されていませんので、 AKS クラスターは指定したリソースグループのリージョンで作成されます。また、 ACR からイメージをプルできるように、 AKS に ACR をアタッチするオプション `--attach-acr` が付与されています。前のワークショップで作成した ACR の名前を `<acrName>`に入力してください。
 
 ```azurecli
 az aks create \
@@ -23,7 +23,7 @@ az aks create \
     --network-plugin azure \
     --attach-acr <acrName>
 ```
-作成したAKSクラスターでAzure Monitorを有効化するため、`--enable-addons`オプションを追加していますが、AKSクラスター作成後に有効化することも可能です。他にも多数のオプションを指定できます。`az aks create`コマンドの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
+作成した AKS クラスターでAzure Monitorを有効化するため、`--enable-addons`オプションを追加していますが、AKSクラスター作成後に有効化することも可能です。他にも多数のオプションを指定できます。`az aks create`コマンドの詳細は[こちら](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create)を参照ください。
 
 デプロイにはしばらく時間がかかります。デプロイが完了すると、この AKS デプロイに関する情報が JSON 形式で表示されます。
 
