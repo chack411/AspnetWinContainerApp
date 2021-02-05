@@ -290,11 +290,12 @@ kubectl delete pod/<podName>
 kubectl get pods
 ```
 停止した pod は削除されていますが、新たな pod がデプロイされていることが確認できます。
+
 また、今回利用したDeployment のマニフェストには、 `livenessProbe` を定義しています。これにより、定期的に pod の状態を確認し、問題があれば自動的に pod を停止して再起動することで、自動回復することもできます。
 
 ## Azure Monitor for Containerによる監視
 
-[Azure ポータル](portal.azure.com)を開き、画面上部の検索ボックスで`モニター`と入力すると、 Azure Monitor のアイコンが下に表示されます。これをクリックして、 Azure Monitor のトップ画面に移動します。
+[Azure ポータル](https://portal.azure.com)を開き、画面上部の検索ボックスで`モニター`と入力すると、 Azure Monitor のアイコンが下に表示されます。これをクリックして、 Azure Monitor のトップ画面に移動します。
 
 
 ![Azure Monitor1](media/azmon1.png)
